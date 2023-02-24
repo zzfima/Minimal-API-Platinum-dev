@@ -2,32 +2,15 @@ var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 var _hotels = new List<Hotel>();
 
-_hotels.Add(new Hotel()
-{
-    Id = 1,
-    Latitude = 21,
-    Longitude = 32,
-    Name = "Hof argaman"
-});
-
-_hotels.Add(new Hotel()
-{
-    Id = 2,
-    Latitude = 22,
-    Longitude = 32,
-    Name = "Nof hatsafon"
-});
-
 app.MapGet("/hotels", () => _hotels);
-
-app.Run();
-
-
-
-public class Hotel
+app.MapGet("/hotels/{id}", (int id) => _hotels.FirstOrDefault(h => h.Id == id));
+app.MapPost("/hotels", (Hotel h) => _hotels.Add(h));
+app.MapDelete("/hotels", () => _hotels.Clear());
+app.MapPut("/hotels", (Hotel h) =>
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public int Latitude { get; set; }
-    public int Longitude { get; set; }
-}
+    var index = _hotels.FindIndex(ht => ht.Id == h.Id);
+    if (index < 0)
+        throw new Exception("Hotel not found");
+    _hotels[index] = h;
+});
+app.Run();
