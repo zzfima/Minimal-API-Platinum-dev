@@ -46,5 +46,3 @@ open terminal
 2. install sqlite:
 open terminal
 *dotnet add package Microsoft.EntityFrameworkCore.Sqlite*
-
-3. J

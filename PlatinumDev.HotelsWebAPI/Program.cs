@@ -1,3 +1,5 @@
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 //add data context
@@ -16,28 +18,42 @@ if (app.Environment.IsDevelopment())
     dbService.Database.EnsureCreated();
 }
 
-var _hotels = new List<Hotel>();
-
 //Get all hotels
-app.MapGet("/hotels", () => _hotels);
+app.MapGet("/hotels", async (HotelDB hdb) => await hdb.Hotels.ToListAsync());
 
 //Get specific hotel by id
-app.MapGet("/hotels/{id}", (int id) => _hotels.FirstOrDefault(h => h.Id == id));
+app.MapGet("/hotels/{id}", async (int id, HotelDB hdb) =>
+    await hdb.Hotels.FirstOrDefaultAsync(h => h.Id == id) is Hotel hotel ?
+    Results.Ok(hotel) :
+    Results.NotFound()
+);
 
 //Add hotel
-app.MapPost("/hotels", (Hotel h) => _hotels.Add(h));
+app.MapPost("/hotels", async ([FromBody] Hotel h, [FromServices] HotelDB hdb) =>
+{
+    hdb.Add(h);
+    await hdb.SaveChangesAsync();
+    return Results.Created($"/hotels{h.Id}", h);
+});
 
 //Delete all hotels
-app.MapDelete("/hotels", () => _hotels.Clear());
+app.MapDelete("/hotels", async (HotelDB hdb) =>
+{
+    await hdb.Hotels.ExecuteDeleteAsync();
+    await hdb.SaveChangesAsync();
+    return Results.Ok();
+});
 
 //Update specific hotel, id shall be same
-app.MapPut("/hotels", (Hotel h) =>
+/*
+app.MapPut("/hotels", async (HotelDB h) =>
 {
-    var index = _hotels.FindIndex(ht => ht.Id == h.Id);
+    var index = h.Hotels.FindAsync(ht => ht.Id == h.Id);
     if (index < 0)
         throw new Exception("Hotel not found");
     _hotels[index] = h;
 });
+*/
 
 app.Run();
 
