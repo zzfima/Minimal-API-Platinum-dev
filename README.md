@@ -2,6 +2,8 @@
 
 from: <https://www.youtube.com/playlist?list=PLEtg-LdqEKXb9RjcrqAHGPlQTBw0uISy7>
 
+## Write simple minimal web api
+
 1. install project: *dotnet new web --name PlatinumDev.HotelsWebAPI*
 
 2. run project: *dotnet run*
@@ -13,7 +15,7 @@ open terminal
 For change default nuget server, go to file *%appdata% \NuGet\NuGet.Config* and change server to:
 add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3"
 
-4. run in terminal: *httprepl http://localhost:5003*
+4. run in terminal: *httprepl <http://localhost:5003>*
 
 5. write: *get*
 console output:
@@ -35,4 +37,14 @@ post hotels
 "Longitude": 32
 }
 
-7. aaa
+## Add SQLite, EF core
+
+1. install EF core:
+open terminal
+*dotnet add package Microsoft.EntityFrameworkCore*
+
+2. install sqlite:
+open terminal
+*dotnet add package Microsoft.EntityFrameworkCore.Sqlite*
+
+3. J
