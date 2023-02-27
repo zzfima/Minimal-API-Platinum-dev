@@ -44,16 +44,32 @@ app.MapDelete("/hotels", async (HotelDB hdb) =>
     return Results.Ok();
 });
 
-//Update specific hotel, id shall be same
-/*
-app.MapPut("/hotels", async (HotelDB h) =>
+//Delete specific hotel
+app.MapDelete("/hotels{id}", async (int id, HotelDB hdb) =>
 {
-    var index = h.Hotels.FindAsync(ht => ht.Id == h.Id);
-    if (index < 0)
-        throw new Exception("Hotel not found");
-    _hotels[index] = h;
+    var foundHotel = await hdb.Hotels.FindAsync(new object[] { id });
+    if (foundHotel == null)
+        return Results.NotFound();
+    hdb.Remove(foundHotel);
+    await hdb.SaveChangesAsync();
+    return Results.Ok();
 });
-*/
+
+//Update specific hotel, id shall be same
+app.MapPut("/hotels", async ([FromBody] Hotel h, [FromServices] HotelDB hdb) =>
+{
+    var foundHotel = await hdb.Hotels.FindAsync(new object[] { h.Id });
+    if (foundHotel == null)
+        return Results.NotFound();
+
+    foundHotel.Latitude = h.Latitude;
+    foundHotel.Longitude = h.Longitude;
+    foundHotel.Name = h.Name;
+
+    hdb.Update(foundHotel);
+    await hdb.SaveChangesAsync();
+    return Results.Ok();
+});
 
 app.Run();
 
