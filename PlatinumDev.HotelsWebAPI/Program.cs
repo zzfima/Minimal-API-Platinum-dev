@@ -73,9 +73,5 @@ app.MapPut("/hotels", async ([FromBody] Hotel h, [FromServices] HotelDB hdb) =>
 
 app.Run();
 
-//db context
-public class HotelDB : DbContext
-{
-    public HotelDB(DbContextOptions<HotelDB> options) : base(options) { }
-    public DbSet<Hotel> Hotels => Set<Hotel>();
-}
+//add HTTPS
+app.UseHttpsRedirection();
