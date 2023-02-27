@@ -46,3 +46,9 @@ open terminal
 2. install sqlite:
 open terminal
 *dotnet add package Microsoft.EntityFrameworkCore.Sqlite*
+
+## Add Swagger
+
+1. install Swagger:
+open terminal
+*dotnet add package Swashbuckle.AspNetCore*
