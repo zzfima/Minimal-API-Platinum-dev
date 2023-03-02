@@ -52,3 +52,7 @@ open terminal
 1. install Swagger:
 open terminal
 *dotnet add package Swashbuckle.AspNetCore*
+
+2. Use Swagger
+run project
+go to: http://localhost:XXX/swagger/index.html
